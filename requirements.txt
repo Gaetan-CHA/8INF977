@@ -1,0 +1,7 @@
+﻿transformers>=4.44
+accelerate
+torch
+numpy
+pandas
+pyyaml
+tqdm

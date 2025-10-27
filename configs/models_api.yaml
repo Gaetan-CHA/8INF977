@@ -1,0 +1,126 @@
+﻿# configs/models_api_extended.yaml
+version: 1
+provider: huggingface
+models:
+
+  # -------- META (Llama 2 / Llama 3) --------
+  - id: meta-llama/Llama-2-7b-chat-hf
+    enterprise: Meta
+    params_b: 7
+    context_length: 4096
+
+  - id: meta-llama/Llama-2-13b-chat-hf
+    enterprise: Meta
+    params_b: 13
+    context_length: 4096
+
+  - id: meta-llama/Llama-2-70b-chat-hf
+    enterprise: Meta
+    params_b: 70
+    context_length: 4096
+
+  - id: meta-llama/Meta-Llama-3-8B-Instruct
+    enterprise: Meta
+    params_b: 8
+    context_length: 8000
+
+  - id: meta-llama/Meta-Llama-3-70B-Instruct
+    enterprise: Meta
+    params_b: 70
+    context_length: 8000
+
+  # -------- MISTRAL --------
+  - id: mistralai/Mistral-7B-Instruct-v0.2
+    enterprise: Mistral
+    params_b: 7
+    context_length: 32000
+
+  - id: mistralai/Mixtral-8x7B-Instruct-v0.1
+    enterprise: Mistral
+    params_b: 56
+    context_length: 32000
+
+  # -------- GOOGLE / GEMMA --------
+  - id: google/gemma-2b
+    enterprise: Google
+    params_b: 2
+    context_length: 8000
+
+  - id: google/gemma-7b
+    enterprise: Google
+    params_b: 7
+    context_length: 8000
+
+  # -------- TII / FALCON --------
+  - id: tiiuae/falcon-7b-instruct
+    enterprise: TII
+    params_b: 7
+    context_length: 2048
+
+  - id: tiiuae/falcon-40b-instruct
+    enterprise: TII
+    params_b: 40
+    context_length: 2048
+
+  # -------- MOSAICML / MPT --------
+  - id: mosaicml/mpt-7b-chat
+    enterprise: MosaicML
+    params_b: 7
+    context_length: 8192
+
+  - id: mosaicml/mpt-30b-chat
+    enterprise: MosaicML
+    params_b: 30
+    context_length: 8192
+
+  # -------- ALIBABA / QWEN --------
+  - id: Qwen/Qwen-14B-Chat
+    enterprise: Alibaba
+    params_b: 14
+    context_length: 8000
+
+  - id: Qwen/Qwen2-72B-Instruct
+    enterprise: Alibaba
+    params_b: 72
+    context_length: 32000
+
+  # -------- BIGSCIENCE / BLOOM --------
+  - id: bigscience/bloom
+    enterprise: BigScience
+    params_b: 176
+    context_length: 2048
+
+  # -------- ELEUTHER / GPT family --------
+  - id: EleutherAI/gpt-j-6b
+    enterprise: EleutherAI
+    params_b: 6
+    context_length: 2048
+
+  - id: EleutherAI/gpt-neox-20b
+    enterprise: EleutherAI
+    params_b: 20
+    context_length: 2048
+
+  # -------- REDPAJAMA / TOGETHER --------
+  - id: togethercomputer/RedPajama-INCITE-Chat-3B-v1
+    enterprise: Together
+    params_b: 3
+    context_length: 8192
+
+  # -------- LLM-JP (remplace OpenAssistant) --------
+  - id: llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0
+    enterprise: LLM-JP
+    params_b: 13
+    context_length: 8192
+
+  # -------- CODE / SPECIALTY --------
+  - id: bigcode/starcoder
+    enterprise: BigCode
+    params_b: 15
+    context_length: 8192
+
+  # -------- DEEPSEEK --------
+  - id: deepseek-ai/deepseek-coder-6.7b-instruct
+    enterprise: DeepSeek
+    params_b: 6.7
+    context_length: 16000

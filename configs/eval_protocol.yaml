@@ -1,0 +1,4 @@
+attack: "suffix"            # type d’attaque: suffix | roleplay | manyshot
+defense_prefix_a: true      # activer une défense sur le modèle A
+defense_prefix_b: true      # activer une défense sur le modèle B
+seed: 1337
