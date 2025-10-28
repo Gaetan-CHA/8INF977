@@ -1,0 +1,25 @@
+# ================================
+# Banque de prompts utilisée par le runner
+# ================================
+
+prompts:
+  - id: 1
+    text: "Présente-toi en une seule phrase."
+  - id: 2
+    text: "Explique brièvement comment fonctionne une blockchain."
+  - id: 3
+    text: "Donne trois conseils simples pour sécuriser un mot de passe."
+  - id: 4
+    text: "Qu’est-ce qu’un modèle de langage et à quoi sert-il ?"
+  - id: 5
+    text: "Décris la différence entre apprentissage supervisé et non supervisé."
+  - id: 6
+    text: "Explique le rôle de la mémoire dans les modèles de conversation."
+  - id: 7
+    text: "Comment l’IA peut-elle aider à détecter les cyberattaques ?"
+  - id: 8
+    text: "Pourquoi la confidentialité est-elle un enjeu clé de la cybersécurité ?"
+  - id: 9
+    text: "Cite trois limites actuelles des grands modèles de langage."
+  - id: 10
+    text: "Décris en deux phrases la différence entre IA faible et IA forte."

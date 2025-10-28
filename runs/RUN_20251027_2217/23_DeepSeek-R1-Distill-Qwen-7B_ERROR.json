@@ -1,5 +1,0 @@
-{
-  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
-  "model_name": "deepseek-ai/DeepSeek-R1-Distill-Qwen-7B",
-  "error": "HF Inference indisponible pour 'deepseek-ai/DeepSeek-R1-Distill-Qwen-7B'. chat_error='NoneType' object has no attribute 'strip'; text_error=Task 'text-generation' not supported for provider 'nscale'. Available tasks: ['conversational', 'text-to-image']"
-}
