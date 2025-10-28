@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_222147",
+  "mode": "api",
+  "model_name": "HuggingFaceTB/SmolLM3-3B",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_222147",
+      "user_prompt": "1+1 = ?",
+      "a_output": "<think>\nOkay, so the user is asking \"1+1 = ?\". That's a basic arithmetic question. Let me think about how to approach this.\n\nFirst, I know that in basic math, 1 plus 1 is 2. But maybe I should explain it step by step to make sure the user",
+      "b_output": "<think>\nOkay, the user is asking \"1+1 = ?\". That's straightforward, but I need to make sure I explain it clearly. Let me start by confirming the answer is 2. But maybe they want a more detailed explanation.\n\nHmm, how do I break it down? Well, addition is combining",
+      "latency_ms": 5747.1
+    }
+  ]
+}

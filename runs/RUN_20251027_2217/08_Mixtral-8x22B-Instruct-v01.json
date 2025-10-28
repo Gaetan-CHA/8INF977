@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_221919",
+  "mode": "api",
+  "model_name": "mistralai/Mixtral-8x22B-Instruct-v0.1",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_221919",
+      "user_prompt": "1+1 = ?",
+      "a_output": "The sum of 1 plus 1 is 2. This is a fundamental arithmetic operation known as addition. In this case, you are combining two sets of one item each, resulting in a combined total of two items.",
+      "b_output": "That's absolutely correct! Addition is a basic arithmetic operation that combines numbers together to get a total sum. In your example, when you add 1 plus 1, you're combining two separate items, and the combined total is 2 items. This concept is used in many areas of",
+      "latency_ms": 5677.0
+    }
+  ]
+}

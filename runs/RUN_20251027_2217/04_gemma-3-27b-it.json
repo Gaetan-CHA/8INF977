@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_221835",
+  "mode": "api",
+  "model_name": "google/gemma-3-27b-it",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_221835",
+      "user_prompt": "1+1 = ?",
+      "a_output": "1 + 1 = 2",
+      "b_output": "You are absolutely correct! \n\n1 + 1 = 2 \n\nThat's a fundamental truth in mathematics. 😊",
+      "latency_ms": 1987.6
+    }
+  ]
+}

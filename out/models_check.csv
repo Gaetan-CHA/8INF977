@@ -1,0 +1,27 @@
+enterprise,model_id,params_b,context_length,installed,remote,repo_type,access,note
+,google/gemma-2-2b-it,,,no,available,gated,ok,gated
+,google/gemma-2-9b-it,,,no,available,gated,ok,gated
+,google/gemma-3-12b-it,,,no,available,gated,ok,gated
+,google/gemma-3-27b-it,,,no,available,gated,ok,gated
+,mistralai/Mistral-7B-Instruct-v0.3,,,yes,available,public,ok,"vllm,safetensors,mistral,mistral-common,base_model:mistralai/Mistral-7B-v0.3"
+,mistralai/Mixtral-8x7B-Instruct-v0.1,,,no,available,public,ok,"vllm,safetensors,mixtral,fr,it"
+,mistralai/Mistral-Small-3.1-24B-Instruct-2503,,,no,available,gated,ok,gated
+,mistralai/Mixtral-8x22B-Instruct-v0.1,,,no,available,public,ok,"vllm,safetensors,mixtral,mistral-common,en"
+,mistralai/Mistral-Nemo-Base-2407,,,no,available,public,ok,"vllm,safetensors,mistral,mistral-common,en"
+,meta-llama/Llama-3.2-1B-Instruct,,,no,available,gated,ok,gated
+,meta-llama/Llama-3.2-3B-Instruct,,,no,available,gated,ok,gated
+,meta-llama/Llama-3.1-8B-Instruct,,,no,available,gated,ok,gated
+,meta-llama/Llama-3.3-70B-Instruct,,,no,available,gated,ok,gated
+,meta-llama/Llama-3.1-405B-Instruct,,,no,available,gated,ok,gated
+,Qwen/Qwen3-1.7B,,,no,available,public,ok,"transformers,safetensors,qwen3,text-generation,conversational"
+,Qwen/Qwen3-8B,,,no,available,public,ok,"transformers,safetensors,qwen3,text-generation,conversational"
+,Qwen/Qwen3-30B-A3B-Instruct-2507,,,no,available,public,ok,"transformers,safetensors,qwen3_moe,text-generation,conversational"
+,Qwen/Qwen3-Next-80B-A3B-Instruct,,,no,available,public,ok,"transformers,safetensors,qwen3_next,text-generation,conversational"
+,HuggingFaceH4/zephyr-7b-beta,,,no,available,public,ok,"transformers,pytorch,safetensors,mistral,text-generation"
+,HuggingFaceTB/SmolLM3-3B,,,no,available,public,ok,"transformers,safetensors,smollm3,text-generation,conversational"
+,deepseek-ai/DeepSeek-R1,,,no,available,public,ok,"transformers,safetensors,deepseek_v3,text-generation,conversational"
+,deepseek-ai/DeepSeek-V3,,,no,available,public,ok,"transformers,safetensors,deepseek_v3,text-generation,conversational"
+,deepseek-ai/DeepSeek-R1-Distill-Qwen-7B,,,no,available,public,ok,"transformers,safetensors,qwen2,text-generation,conversational"
+,deepseek-ai/DeepSeek-R1-Distill-Qwen-14B,,,no,available,public,ok,"transformers,safetensors,qwen2,text-generation,conversational"
+,deepseek-ai/DeepSeek-R1-Distill-Llama-70B,,,no,available,public,ok,"transformers,safetensors,llama,text-generation,conversational"
+,deepseek-ai/DeepSeek-R1-0324,,,no,not_found,unknown,unknown,model not found; model not found

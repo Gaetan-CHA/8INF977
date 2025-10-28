@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_222113",
+  "mode": "api",
+  "model_name": "Qwen/Qwen3-30B-A3B-Instruct-2507",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_222113",
+      "user_prompt": "1+1 = ?",
+      "a_output": "1 + 1 = 2",
+      "b_output": "Yes, that's correct!  \n1 + 1 = 2  \n\nThis is a fundamental arithmetic fact, representing the addition of two whole numbers. Let me know if you'd like to explore more math concepts! 😊",
+      "latency_ms": 9379.9
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_222046",
+  "mode": "api",
+  "model_name": "Qwen/Qwen3-1.7B",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_222046",
+      "user_prompt": "1+1 = ?",
+      "a_output": "<think>\nOkay, the user is asking \"1+1 = ?\" which is a basic arithmetic problem. I need to provide the answer. Let me think... 1 plus 1 equals 2. That's straightforward. But wait, maybe they want a more detailed explanation? The user might be testing if I",
+      "b_output": "<think>\nOkay, the user is asking \"1+1 = ?\" which is a simple arithmetic problem. I need to provide the answer. Let me think... 1 plus 1 equals 2. That's straightforward. But maybe they want a more detailed explanation? The user might be testing if I can handle",
+      "latency_ms": 17342.8
+    }
+  ]
+}

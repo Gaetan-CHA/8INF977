@@ -1,0 +1,5 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "model_name": "Qwen/Qwen3-8B",
+  "error": "HF Inference indisponible pour 'Qwen/Qwen3-8B'. chat_error='NoneType' object has no attribute 'strip'; text_error=Task 'text-generation' not supported for provider 'nscale'. Available tasks: ['conversational', 'text-to-image']"
+}

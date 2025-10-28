@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_222134",
+  "mode": "api",
+  "model_name": "HuggingFaceH4/zephyr-7b-beta",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_222134",
+      "user_prompt": "1+1 = ?",
+      "a_output": "1. What is the sum of 5 and 3?\n2. What is 7 times 8?\n3. How many oranges are in a dozen?\n4. What is 25 divided by 5?\n5. Which country won the World Cup in 20",
+      "b_output": "[ASST] 1. The sum of 5 and 3 is 8.\n2. The product of 7 and 8 is 56.\n3. A dozen contains 12 oranges.\n4. The quotient of 25 and 5 is",
+      "latency_ms": 13312.9
+    }
+  ]
+}

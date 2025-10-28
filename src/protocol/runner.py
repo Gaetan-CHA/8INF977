@@ -2,17 +2,36 @@
 import os, sys, yaml, json, time, re
 from datetime import datetime
 from pathlib import Path
-from src.llm_io.hf_client_local import HFClientLocal
-from src.llm_io.hf_client_api import HFClientAPI
+from src.llm_io.hf_client_api import HFClientAPI  # API only
 
 ROOT = Path(__file__).resolve().parents[2]
-CFG_API   = ROOT / "configs" / "models_api.yaml"
-CFG_LOCAL = ROOT / "configs" / "models_local.yaml"
-RUNS_DIR  = ROOT / "runs"
+CFG_API  = ROOT / "configs" / "models_api.yaml"
+RUNS_DIR = ROOT / "runs"
 
 def _load_yaml(path: Path):
     with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+        return yaml.safe_load(f) or {}
+
+def _sanitize(name: str) -> str:
+    return re.sub(r"[^A-Za-z0-9\-]+", "", str(name).split("/")[-1])
+
+def _extract_models(cfg: dict):
+    out = []
+    # 1) Format model_1, model_2, ...
+    for k, v in cfg.items():
+        if isinstance(v, dict) and k.startswith("model_") and "model_name" in v:
+            try:
+                n = int(k.split("_", 1)[1])
+            except Exception:
+                n = 10**9
+            out.append((n, v))
+    # 2) Format models: [ {model_name: ...}, ... ]
+    if not out:
+        lst = cfg.get("models", [])
+        if isinstance(lst, list):
+            out = list(enumerate(lst, 1))
+    out.sort(key=lambda x: x[0])
+    return [v for _, v in out]
 
 def _get_token(cfg: dict) -> str:
     tok = os.getenv("HF_TOKEN")
@@ -25,53 +44,77 @@ def _get_token(cfg: dict) -> str:
         pass
     return cfg.get("hf_token", "")
 
-def _sanitize(name: str) -> str:
-    return re.sub(r"[^A-Za-z0-9\-]+", "", name.split("/")[-1])
-
-def _load_cfg_for_mode(mode: str) -> dict:
-    return _load_yaml(CFG_API if mode == "api" else CFG_LOCAL)
-
-def load_models(mode: str):
-    cfg = _load_cfg_for_mode(mode)
-    a, b = cfg["model_a"], cfg["model_b"]
-    if mode == "api":
-        token = _get_token(cfg)
-        if not token:
-            raise RuntimeError("Token manquant: keyring(HF/HF_TOKEN) ou env HF_TOKEN ou cfg.hf_token.")
-        A = HFClientAPI(a["model_name"], token, a.get("max_new_tokens",200), a.get("temperature",0.7))
-        B = HFClientAPI(b["model_name"], token, b.get("max_new_tokens",200), b.get("temperature",0.7))
-    else:
-        A = HFClientLocal(a["model_name"], a.get("max_new_tokens",200), a.get("temperature",0.7))
-        B = HFClientLocal(b["model_name"], b.get("max_new_tokens",200), b.get("temperature",0.7))
-    return A, B
-
-def dialogue(prompts, A, B, mode: str, out_dir: Path = RUNS_DIR):
-    out_dir.mkdir(parents=True, exist_ok=True)
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    name_a, name_b = _sanitize(getattr(A,"model_name","A")), _sanitize(getattr(B,"model_name","B"))
-    out_file = out_dir / f"{mode.capitalize()}_{ts}_{name_a}_{name_b}.jsonl"
-    with open(out_file, "w", encoding="utf-8") as w:
-        for i, user in enumerate(prompts, 1):
-            t0=time.time(); a=A.generate(user); ta=(time.time()-t0)*1000
-            t0=time.time(); b=B.generate(a);    tb=(time.time()-t0)*1000
-            row={"turn":i,"mode":mode,"timestamp":ts,"user_prompt":user,
-                 "a_model":getattr(A,"model_name","A"),"b_model":getattr(B,"model_name","B"),
-                 "a_output":a,"b_output":b,"latency_ms":round(ta+tb,1)}
-            w.write(json.dumps(row, ensure_ascii=False)+"\n")
-            print(f"[turn {i}] {row['latency_ms']} ms")
-    print(f"Run stored in {out_file}")
+def _make_api_client(m: dict, token: str):
+    name = m["model_name"]
+    mx   = int(m.get("max_new_tokens", 64))
+    temp = float(m.get("temperature", 0.7))
+    if not token:
+        raise RuntimeError("HF_TOKEN manquant pour l’API Hugging Face.")
+    return HFClientAPI(name, token, mx, temp)
 
 def main():
-    mode = (sys.argv[1].lower() if len(sys.argv)>1 else "api")
-    if mode not in {"local","api"}:
-        raise SystemExit("Usage: python -m src.protocol.runner [local|api]")
-    A,B = load_models(mode)
-    prompts = [
-        "Présente-toi en une phrase.",
-        "Explique brièvement comment fonctionne une blockchain.",
-        "Donne 3 conseils pour sécuriser un mot de passe."
-    ]
-    dialogue(prompts, A, B, mode)
+    cfg = _load_yaml(CFG_API)
+    models = _extract_models(cfg)
+    if not models:
+        raise SystemExit(f"{CFG_API.as_posix()}: aucun modèle trouvé (ni 'model_X', ni 'models').")
+    token = _get_token(cfg)
+
+    # API-only, bloque tout download local
+    os.environ["TRANSFORMERS_OFFLINE"] = "1"
+    os.environ["HF_HUB_OFFLINE"] = "1"
+
+    # Print de contrôle
+    print(f"Models détectés ({len(models)}):")
+    for i, m in enumerate(models, 1):
+        print(f"  [{i}] {m.get('model_name')}  (max_new_tokens={m.get('max_new_tokens',64)}, temp={m.get('temperature',0.7)})")
+
+    run_stamp = datetime.now().strftime("%Y%m%d_%H%M")
+    out_dir = RUNS_DIR / f"RUN_{run_stamp}"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    prompts = ["1+1 = ?"]
+
+    for idx, m in enumerate(models, 1):
+        model_label = m.get("model_name", f"model_{idx}")
+        safe_name = _sanitize(model_label)
+        out_path = out_dir / f"{idx:02d}_{safe_name}.json"
+        try:
+            C = _make_api_client(m, token)  # A = B = C
+            turns, ts = [], datetime.now().strftime("%Y%m%d_%H%M%S")
+            for i, user in enumerate(prompts, 1):
+                t0 = time.time(); a = C.generate(user); ta = (time.time() - t0) * 1000.0
+                t0 = time.time(); b = C.generate(a);    tb = (time.time() - t0) * 1000.0
+                turns.append({
+                    "turn": i, "timestamp": ts, "user_prompt": user,
+                    "a_output": a, "b_output": b, "latency_ms": round(ta+tb, 1)
+                })
+                print(f"[{idx}/{len(models)}][turn {i}] {safe_name}: {round(ta+tb,1)} ms")
+
+            rec = {
+                "run_dir": out_dir.as_posix(),
+                "run_timestamp": ts,
+                "mode": "api",
+                "model_name": model_label,
+                "params": {
+                    "max_new_tokens": m.get("max_new_tokens", 64),
+                    "temperature": m.get("temperature", 0.7),
+                },
+                "turns": turns
+            }
+            with open(out_path, "w", encoding="utf-8") as f:
+                json.dump(rec, f, ensure_ascii=False, indent=2)
+
+        except Exception as e:
+            err_path = out_dir / f"{idx:02d}_{safe_name}_ERROR.json"
+            with open(err_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "run_dir": out_dir.as_posix(),
+                    "model_name": model_label,
+                    "error": str(e)
+                }, f, ensure_ascii=False, indent=2)
+            print(f"[{idx}/{len(models)}] ERROR {safe_name}: {e}")
+
+    print(f"Résultats: {out_dir.as_posix()}")
 
 if __name__ == "__main__":
     main()

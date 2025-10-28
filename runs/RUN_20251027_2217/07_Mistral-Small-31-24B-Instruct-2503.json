@@ -1,0 +1,20 @@
+{
+  "run_dir": "D:/UQAC/8INF977 - Sujet spécial en cybersécurité/runs/RUN_20251027_2217",
+  "run_timestamp": "20251027_221845",
+  "mode": "api",
+  "model_name": "mistralai/Mistral-Small-3.1-24B-Instruct-2503",
+  "params": {
+    "max_new_tokens": 64,
+    "temperature": 0.7
+  },
+  "turns": [
+    {
+      "turn": 1,
+      "timestamp": "20251027_221845",
+      "user_prompt": "1+1 = ?",
+      "a_output": "The sum of 1 + 1 is 2.",
+      "b_output": "Yes, that's correct! The sum of 1 + 1 is indeed 2. Here it is:\n\n1\n+1\n----\n 2",
+      "latency_ms": 34347.6
+    }
+  ]
+}
