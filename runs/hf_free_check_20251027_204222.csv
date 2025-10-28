@@ -1,0 +1,29 @@
+id,endpoint_url,status,note
+google/gemma-2-2b-it,,error,ValueError: Model google/gemma-2-2b-it is not supported for task text-generation and provider nebius. Supported task: conversational.
+HuggingFaceH4/zephyr-7b-beta,,error,ValueError: Model HuggingFaceH4/zephyr-7b-beta is not supported for task text-generation and provider featherless-ai. Supported task: conversational.
+meta-llama/Llama-3.1-8B-Instruct,,error,ValueError: Model meta-llama/Llama-3.1-8B-Instruct is not supported for task text-generation and provider novita. Supported task: conversational.
+mistralai/Mistral-7B-Instruct-v0.3,,error,ValueError: Model mistralai/Mistral-7B-Instruct-v0.3 is not supported for task text-generation and provider together. Supported task: conversational.
+mistralai/Mixtral-8x7B-Instruct-v0.1,,error,ValueError: Model mistralai/Mixtral-8x7B-Instruct-v0.1 is not supported for task text-generation and provider together. Supported task: conversational.
+meta-llama/Meta-Llama-3-8B-Instruct,,error,ValueError: Model meta-llama/Meta-Llama-3-8B-Instruct is not supported for task text-generation and provider novita. Supported task: conversational.
+meta-llama/Llama-2-7b-chat-hf,,error,StopIteration: 
+meta-llama/Llama-2-13b-chat-hf,,error,ValueError: Model meta-llama/Llama-2-13b-chat-hf is not supported for task text-generation and provider featherless-ai. Supported task: conversational.
+meta-llama/Llama-2-70b-chat-hf,,error,StopIteration: 
+meta-llama/Meta-Llama-3-8B-Instruct,,error,ValueError: Model meta-llama/Meta-Llama-3-8B-Instruct is not supported for task text-generation and provider novita. Supported task: conversational.
+meta-llama/Meta-Llama-3-70B-Instruct,,error,ValueError: Model meta-llama/Meta-Llama-3-70B-Instruct is not supported for task text-generation and provider novita. Supported task: conversational.
+mistralai/Mistral-7B-Instruct-v0.2,,error,ValueError: Model mistralai/Mistral-7B-Instruct-v0.2 is not supported for task text-generation and provider featherless-ai. Supported task: conversational.
+mistralai/Mixtral-8x7B-Instruct-v0.1,,error,ValueError: Model mistralai/Mixtral-8x7B-Instruct-v0.1 is not supported for task text-generation and provider together. Supported task: conversational.
+google/gemma-2b,,error,StopIteration: 
+google/gemma-7b,,error,StopIteration: 
+tiiuae/falcon-7b-instruct,,error,StopIteration: 
+tiiuae/falcon-40b-instruct,,error,StopIteration: 
+mosaicml/mpt-7b-chat,,error,StopIteration: 
+mosaicml/mpt-30b-chat,,error,StopIteration: 
+Qwen/Qwen-14B-Chat,,error,StopIteration: 
+Qwen/Qwen2-72B-Instruct,,error,ValueError: Model Qwen/Qwen2-72B-Instruct is not supported for task text-generation and provider featherless-ai. Supported task: conversational.
+bigscience/bloom,,error,StopIteration: 
+EleutherAI/gpt-j-6b,,error,StopIteration: 
+EleutherAI/gpt-neox-20b,,error,StopIteration: 
+togethercomputer/RedPajama-INCITE-Chat-3B-v1,,error,StopIteration: 
+llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0,,error,StopIteration: 
+bigcode/starcoder,,error,StopIteration: 
+deepseek-ai/deepseek-coder-6.7b-instruct,,error,StopIteration: 

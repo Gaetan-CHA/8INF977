@@ -17,7 +17,7 @@ Alibaba,Qwen/Qwen2-72B-Instruct,72,32000,no,available,public,ok,"transformers,sa
 BigScience,bigscience/bloom,176,2048,no,available,public,ok,"transformers,pytorch,tensorboard,safetensors,bloom"
 EleutherAI,EleutherAI/gpt-j-6b,6,2048,no,available,public,ok,"transformers,pytorch,tf,jax,gptj"
 EleutherAI,EleutherAI/gpt-neox-20b,20,2048,no,available,public,ok,"transformers,pytorch,safetensors,gpt_neox,text-generation"
-Together,togethercomputer/RedPajama-INCITE-7B-v1,7,8192,no,not_found,unknown,unknown,model not found; model not found
-OpenAssistant,OpenAssistant/oasst-sft-7-llama-30b,30,8192,no,not_found,unknown,unknown,model not found; model not found
+Together,togethercomputer/RedPajama-INCITE-Chat-3B-v1,3,8192,no,available,public,ok,"transformers,pytorch,gpt_neox,text-generation,en"
+LLM-JP,llm-jp/llm-jp-13b-instruct-full-jaster-dolly-oasst-v1.0,13,8192,no,available,public,ok,"transformers,pytorch,gpt2,text-generation,en"
 BigCode,bigcode/starcoder,15,8192,no,available,gated,ok,gated
 DeepSeek,deepseek-ai/deepseek-coder-6.7b-instruct,6.7,16000,no,available,public,ok,"transformers,pytorch,safetensors,llama,text-generation"

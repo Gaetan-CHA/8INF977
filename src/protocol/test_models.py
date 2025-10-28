@@ -2,34 +2,26 @@
 """
 Test script for models_api.yaml on Hugging Face platform.
 
-Features
-- Lists locally cached HF models (installed) from ~/.cache/huggingface/hub.
-- Prints short procedure to install dependencies and download models.
-- Checks access to Hugging Face API token (env, keyring, token file).
-- Loads models from models_api.yaml and verifies availability:
-    * Installed locally (cache present)
-    * Remote status via HfApi: available / gated / not_found / error / no_api
-    * Repo type: public vs gated (nature du dépôt)
-    * Access test: ok / no / unknown (capacité effective à lister/télécharger)
-- Outputs a summary table to stdout and saves CSV + Markdown files.
-
-Usage
-  python test_models.py --yaml models_api.yaml --out out
-
-Requires
-  pip install pyyaml huggingface_hub tabulate
-  # optional but useful
-  pip install transformers safetensors accelerate
+- Liste le cache local HF.
+- Vérifie le token HF (env, keyring, fichier).
+- Lit un YAML de modèles et vérifie:
+  * Présence locale
+  * Statut distant: available / gated / not_found / error / no_api
+  * Type de dépôt: public / gated / unknown
+  * Accès effectif: ok / no / unknown
+- Écrit CSV + Markdown dans runs/CHECK_YYYYMMDD_HH_MM_n°XXX/ si --out=auto (par défaut).
 """
+
 from __future__ import annotations
 import os
 import sys
+import re
 import csv
 import yaml
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List, Optional, Tuple
-
+from datetime import datetime
 
 # Optional keyring import
 try:
@@ -39,24 +31,22 @@ except Exception:
 
 # Optional hub imports (compatible 0.36.0 → >=1.0)
 try:
-    from huggingface_hub import HfApi, snapshot_download  # OK pour 0.36.0
+    from huggingface_hub import HfApi, snapshot_download
     try:
         from huggingface_hub import HfHubHTTPError        # >=0.39
     except Exception:
-        from huggingface_hub.utils import HfHubHTTPError  # <=0.38 (dont 0.36.0)
+        from huggingface_hub.utils import HfHubHTTPError  # <=0.38
 except Exception as e:
     print("IMPORT_ERROR huggingface_hub:", repr(e))
     HfApi = None
     snapshot_download = None
-    class HfHubHTTPError(Exception):  # fallback local
+    class HfHubHTTPError(Exception):
         pass
-
 
 if HfApi is None:
     print("ERROR: 'huggingface_hub' absent dans l’environnement courant.")
     print("Fix: python -m pip install -U huggingface_hub keyring tabulate pyyaml")
     sys.exit(1)
-
 
 # Optional pretty table
 try:
@@ -64,7 +54,7 @@ try:
 except Exception:
     tabulate = None  # type: ignore
 
-DEFAULT_YAML = "models_api.yaml"
+DEFAULT_YAML = "configs/models_api.yaml"
 
 @dataclass
 class ModelSpec:
@@ -79,19 +69,14 @@ class ModelCheck:
     remote: str       # available | gated | not_found | error | no_api
     repo_type: str    # public | gated | unknown
     access: str       # ok | no | unknown
-    note: str         # details/tags/reason
-
+    note: str
 
 # --------------------------- token helpers ---------------------------
 
 def get_token_local() -> str:
-    """Return HF token from env, keyring (hf/HF_TOKEN or huggingface/token), or ~/.huggingface/token file."""
-    # Environment variables
     tok = os.getenv("HF_TOKEN") or os.getenv("HUGGINGFACEHUB_API_TOKEN") or os.getenv("HUGGINGFACE_HUB_TOKEN")
     if tok:
         return tok.strip()
-
-    # Keyring (custom service used in your project)
     if _keyring is not None:
         try:
             tok = _keyring.get_password("hf", "HF_TOKEN")
@@ -99,24 +84,19 @@ def get_token_local() -> str:
                 return tok.strip()
         except Exception:
             pass
-        # Keyring (official hub defaults)
         try:
             tok = _keyring.get_password("huggingface", "token")
             if tok:
                 return tok.strip()
         except Exception:
             pass
-
-    # Token file fallback
     token_file = Path.home() / ".huggingface" / "token"
     if token_file.exists():
         try:
             return token_file.read_text(encoding="utf-8").strip()
         except Exception:
             pass
-
     return ""
-
 
 # --------------------------- other helpers ---------------------------
 
@@ -125,46 +105,30 @@ def print_install_procedure():
     print("1) Dépendances Python :")
     print("   python -m pip install -U pyyaml huggingface_hub keyring tabulate transformers safetensors accelerate")
     print("2) Auth Hugging Face (recommandé pour les modèles gated) :")
-    print("   # Option A: login CLI et stockage dans le keyring Windows")
     print("   python -m huggingface_hub.cli login")
     print("   python -m huggingface_hub.cli whoami")
-    print("   # Option B: variable d’environnement pour la session courante")
     print('   $env:HUGGINGFACEHUB_API_TOKEN="hf_xxx"')
-    print("   # Option C: fichier %USERPROFILE%/.huggingface/token contenant le jeton")
+    print("   %USERPROFILE%/.huggingface/token")
     print("3) Télécharger un modèle dans le cache local :")
     print('   python -c "from huggingface_hub import snapshot_download; snapshot_download(\'meta-llama/Meta-Llama-3-8B-Instruct\')"')
 
-
 def print_no_token_help():
     print("\n== Aucun token détecté : procédure rapide ==")
-    print("A) Installer/mettre à jour les libs :")
-    print("   python -m pip install -U huggingface_hub keyring")
-    print("B) Ajouter le token dans le keyring custom du projet → (hf, HF_TOKEN) :")
-    print("   # PowerShell :")
-    print("   python -c \"import keyring; keyring.set_password('hf','HF_TOKEN','hf_xxx')\"")
-    print("C) Copier aussi le token vers le keyring officiel Hugging Face (facultatif mais utile) :")
-    print('   python -c "import keyring; t=keyring.get_password(\'hf\',\'HF_TOKEN\'); '
-          'keyring.set_password(\'huggingface\',\'token\',t) if t else print(\'no token\')"')
-    print("D) Vérifier :")
-    print('   python -c "import os,keyring; '
-          'print(\'env:\', bool(os.getenv(\'HUGGINGFACEHUB_API_TOKEN\') or os.getenv(\'HF_TOKEN\'))); '
-          'print(\'kr_hf:\', bool(keyring.get_password(\'hf\',\'HF_TOKEN\')) if keyring else False); '
-          'print(\'kr_official:\', bool(keyring.get_password(\'huggingface\',\'token\')) if keyring else False)"')
-
+    print("A) python -m pip install -U huggingface_hub keyring")
+    print("B) python -c \"import keyring; keyring.set_password('hf','HF_TOKEN','hf_xxx')\"")
+    print('C) python -c "import keyring; t=keyring.get_password(\'hf\',\'HF_TOKEN\'); keyring.set_password(\'huggingface\',\'token\',t) if t else print(\'no token\')"')
+    print('D) Vérifier via python -c "import os,keyring; print(bool(os.getenv(\'HUGGINGFACEHUB_API_TOKEN\') or os.getenv(\'HF_TOKEN\')))"')
 
 def list_local_models_from_cache() -> List[str]:
-    """Return repo ids inferred from HF cache structure ~/.cache/huggingface/hub/models--*"""
     cache = Path(os.environ.get("HF_HOME", Path.home()/".cache"/"huggingface"))/"hub"
     found: List[str] = []
     if not cache.exists():
         return found
     for p in cache.glob("models--*"):
-        # format: models--org--repo
         name = p.name[len("models--"):]
         repo_id = name.replace("--", "/")
         found.append(repo_id)
     return sorted(set(found))
-
 
 def read_models_yaml(path: Path) -> List[ModelSpec]:
     data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
@@ -178,16 +142,12 @@ def read_models_yaml(path: Path) -> List[ModelSpec]:
         ))
     return models
 
-
 def have_api() -> Tuple[bool, Optional[str]]:
     tok = get_token_local()
     return (bool(tok), tok if tok else None)
 
-
 def is_installed_locally(model_id: str) -> bool:
-    # Try a quick local-only snapshot check if huggingface_hub is available
     if snapshot_download is None:
-        # Fallback: check cache folder name
         return model_id in set(list_local_models_from_cache())
     try:
         snapshot_download(
@@ -200,18 +160,12 @@ def is_installed_locally(model_id: str) -> bool:
     except Exception:
         return False
 
-
 # --------------------------- remote checks ---------------------------
 
 def _model_info(api: HfApi, model_id: str, token: Optional[str]):
     return api.model_info(model_id, token=token)
 
 def get_repo_type(api: HfApi, model_id: str, token: Optional[str]) -> Tuple[str, str]:
-    """
-    Returns (repo_type, note)
-    repo_type: 'gated' | 'public' | 'unknown'
-    note: 'gated' or tags excerpt
-    """
     try:
         info = _model_info(api, model_id, token)
         gated = bool(getattr(info, "gated", False) or getattr(info, "private", False))
@@ -222,24 +176,14 @@ def get_repo_type(api: HfApi, model_id: str, token: Optional[str]) -> Tuple[str,
         if status == 404:
             return ("unknown", "model not found")
         if status in (401, 403):
-            # On ne sait pas si le repo est public ou gated, mais on n'a pas d'accès
             return ("unknown", "auth required or forbidden")
         return ("unknown", f"http {status} {e}")
     except Exception as e:
         return ("unknown", str(e))
 
 def check_access(api: HfApi, model_id: str, token: Optional[str]) -> Tuple[str, str]:
-    """
-    Returns (access, reason)
-    access: 'ok' | 'no' | 'unknown'
-    - ok: list_repo_files or a tiny snapshot works
-    - no: explicit 401/403
-    - unknown: other errors
-    """
-    # Essai 1: lister quelques fichiers
     try:
-        files = api.list_repo_files(model_id, token=token)
-        # Si on obtient une liste (même vide, improbable), on considère ok
+        _ = api.list_repo_files(model_id, token=token)
         return ("ok", "")
     except HfHubHTTPError as e:
         status = getattr(getattr(e, "response", None), "status_code", None)
@@ -247,12 +191,8 @@ def check_access(api: HfApi, model_id: str, token: Optional[str]) -> Tuple[str, 
             return ("no", "auth required or forbidden")
         if status == 404:
             return ("unknown", "model not found")
-        # autre erreur HTTP
-        # on tente un snapshot local minimal pour trancher
     except Exception:
         pass
-
-    # Essai 2: snapshot_download ultra restreint
     try:
         snapshot_download(
             model_id,
@@ -272,75 +212,82 @@ def check_access(api: HfApi, model_id: str, token: Optional[str]) -> Tuple[str, 
     except Exception as e:
         return ("unknown", str(e))
 
-
 def check_remote(model_id: str, token: Optional[str]) -> Tuple[str, str, str, str]:
-    """
-    Returns (remote_status, repo_type, access, note)
-    remote_status: available | gated | not_found | error | no_api
-    repo_type: public | gated | unknown
-    access: ok | no | unknown
-    note: tags or reason
-    """
     if HfApi is None:
         return ("no_api", "unknown", "unknown", "huggingface_hub not installed")
     api = HfApi()
-    # D'abord récupérer le type de repo
     repo_type, note = get_repo_type(api, model_id, token)
-    # Puis tester l'accès
     access, reason = check_access(api, model_id, token)
 
-    # Construire remote_status
     if repo_type == "unknown":
-        # déduire depuis reason
         if reason == "model not found" or note == "model not found":
             remote = "not_found"
         elif "auth required" in (reason or note):
             remote = "gated"
         else:
-            # on ne sait pas si c'est public/gated mais l'hôte répond
-            remote = "error" if reason else "error"
+            remote = "error"
     else:
         if repo_type == "gated":
-            # repo est de type gated; si access ok => on le marque available
             remote = "available" if access == "ok" else "gated"
         else:
-            # repo public: s'il répond, available
             remote = "available" if access in ("ok", "unknown") else "error"
 
     final_note = note if access == "ok" or not reason else (reason if note == "gated" else f"{note}; {reason}")
     return (remote, repo_type, access, final_note)
-
 
 def check_model(model: ModelSpec, token: Optional[str]) -> ModelCheck:
     installed = is_installed_locally(model.model_id)
     remote_status, repo_type, access, note = check_remote(model.model_id, token)
     return ModelCheck(installed=installed, remote=remote_status, repo_type=repo_type, access=access, note=note)
 
+# --------------------------- run dir helper ---------------------------
+
+_RUNS_BASE = Path("runs")
+
+def _next_run_dir_name(now: datetime) -> str:
+    """Return name like CHECK_YYYYMMDD_HH_MM_n°XXX with incremental XXX."""
+    date_part = now.strftime("%Y%m%d_%H_%M")
+    prefix = f"CHECK_{date_part}_n°"
+    existing = []
+    if _RUNS_BASE.exists():
+        for d in _RUNS_BASE.iterdir():
+            if d.is_dir() and d.name.startswith(prefix):
+                m = re.match(rf"^{re.escape(prefix)}(\d{{3}})$", d.name)
+                if m:
+                    existing.append(int(m.group(1)))
+    nxt = (max(existing) + 1) if existing else 1
+    return f"{prefix}{nxt:03d}"
+
+def make_out_dir(auto: bool, user_path: Optional[str] = None) -> Path:
+    if not auto and user_path:
+        p = Path(user_path)
+        p.mkdir(parents=True, exist_ok=True)
+        return p
+    _RUNS_BASE.mkdir(parents=True, exist_ok=True)
+    name = _next_run_dir_name(datetime.now())
+    out = _RUNS_BASE / name
+    out.mkdir(parents=True, exist_ok=True)
+    print(f"Output directory: {out}")
+    return out
 
 def save_outputs(rows: List[dict], out_dir: Path):
     out_dir.mkdir(parents=True, exist_ok=True)
-    # CSV
     csv_path = out_dir / "models_check.csv"
     with csv_path.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
         writer.writeheader()
         writer.writerows(rows)
-
-    # Markdown
     md_path = out_dir / "models_check.md"
     if tabulate:
         table = tabulate([list(r.values()) for r in rows],
                          headers=list(rows[0].keys()), tablefmt="github")
     else:
         headers = list(rows[0].keys())
-        table = "|" + "|".join(headers) + "|\n" \
-                + "|" + "|".join(["---"] * len(headers)) + "|\n"
+        table = "|" + "|".join(headers) + "|\n" + "|" + "|".join(["---"] * len(headers)) + "|\n"
         for r in rows:
             table += "|" + "|".join(str(v) for v in r.values()) + "|\n"
-
     md_path.write_text(table, encoding="utf-8")
     print(f"\nSaved: {csv_path}\nSaved: {md_path}")
-
 
 # --------------------------- main ---------------------------
 
@@ -348,7 +295,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     import argparse
     p = argparse.ArgumentParser(description="Test models from models_api.yaml")
     p.add_argument("--yaml", default=DEFAULT_YAML, help="Path to models_api.yaml")
-    p.add_argument("--out", default="out", help="Output directory for reports")
+    p.add_argument("--out", default="auto", help='Output dir. Use "auto" to create runs/CHECK_YYYYMMDD_HH_MM_n°XXX/')
     args = p.parse_args(argv)
 
     print_install_procedure()
@@ -382,7 +329,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("No models found in YAML.")
         return 0
 
-    # 4) Check all models
+    # 4) Checks
     print("== Checking models from YAML ==")
     rows: List[dict] = []
     for m in specs:
@@ -394,8 +341,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             "context_length": m.context_length if m.context_length is not None else "",
             "installed": "yes" if chk.installed else "no",
             "remote": chk.remote,
-            "repo_type": chk.repo_type,   # public | gated | unknown
-            "access": chk.access,         # ok | no | unknown
+            "repo_type": chk.repo_type,
+            "access": chk.access,
             "note": chk.note,
         }
         rows.append(row)
@@ -403,7 +350,10 @@ def main(argv: Optional[List[str]] = None) -> int:
               f"remote={row['remote']} repo_type={row['repo_type']} access={row['access']} "
               f"{('('+row['note']+')') if row['note'] else ''}")
 
-    # 5) Summary table
+    # 5) Output dir
+    out_dir = make_out_dir(auto=(args.out == "auto"), user_path=(None if args.out == "auto" else args.out))
+
+    # 6) Summary + save
     print("== Summary ==")
     if tabulate:
         print(tabulate(rows, headers="keys", tablefmt="github"))
@@ -414,9 +364,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         for r in rows:
             print("|" + "|".join(str(v) for v in r.values()) + "|")
 
-    save_outputs(rows, Path(args.out))
+    save_outputs(rows, out_dir)
     return 0
-
 
 if __name__ == "__main__":
     sys.exit(main())
