@@ -1,0 +1,26 @@
+﻿# Configuration Azure OpenAI
+azure:
+  endpoint: "https://8inf977-resource.cognitiveservices.azure.com/"   # endpoint global (fallback)
+  api_version: "2024-12-01-preview"
+  default_model: "gpt-4.1-nano"
+
+# Définition des modèles (un bloc par déploiement)
+models:
+  - model_name: "gpt-4.1-nano"
+    deployment: "gpt-4.1-nano"
+    endpoint: "https://8inf977-resource.cognitiveservices.azure.com/openai/deployments/gpt-4.1-nano/chat/completions?api-version=2025-01-01-preview"  # optionnel; si absent -> utilise azure.endpoint
+    temperature: 1.0
+    max_completion_tokens: 13107
+    top_p: 1.0
+    frequency_penalty: 0.0
+    presence_penalty: 0.0
+
+  # --- Ajoute ici tes autres modèles (copie/colle et adapte) ---
+  # - model_name: "gpt-4.1-mini"
+  #   deployment: "gpt-4.1-mini"
+  #   endpoint: "https://<res-02>.cognitiveservices.azure.com/"
+  #   temperature: 0.7
+  #   max_completion_tokens: 8192
+  #   top_p: 1.0
+  #   frequency_penalty: 0.0
+  #   presence_penalty: 0.0
