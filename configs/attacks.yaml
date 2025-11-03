@@ -1,0 +1,51 @@
+﻿- id: msj_small
+  module: attacks.msj_small
+  description: "many-shot jailbreak small (8 shots) — example stub (GPT)"
+
+- id: suffix_obf
+  module: attacks.suffix_obfusc
+  description: "suffix obfuscated — example stub (GPT)"
+
+- id: manyshot_jailbreak
+  module: attacks.manyshot_jailbreak
+  description: "Many-Shot Jailbreaking — context saturation / instruction conflict (NeurIPS 2024 inspired)"
+
+- id: tree_of_attacks
+  module: attacks.tree_of_attacks
+  description: "Tree-of-Attacks — automatic multi-step jailbreaking via search/exploration (NeurIPS 2024)"
+
+- id: direct_injection
+  module: attacks.direct_injection
+  description: "Direct prompt injection — inline malicious instructions (AgentDojo / prompt injection literature)"
+
+- id: indirect_injection
+  module: attacks.indirect_injection
+  description: "Indirect prompt injection — payload delivered via external content (HTML/files) (AgentDojo)"
+
+- id: soft_prompt_threat
+  module: attacks.soft_prompt_threat
+  description: "Soft-Prompt Threats — embedding / soft-prompt perturbation attack (NeurIPS 2024)"
+
+- id: data_poisoning
+  module: attacks.data_poisoning
+  description: "Data poisoning (training-time) — dataset-level backdoor simulation (Tay incident + NeurIPS 'Mission Impossible')"
+
+- id: prompt_adversarial_tuning
+  module: attacks.prompt_adversarial_tuning
+  description: "Prompt Adversarial Tuning (PAT/APO) — optimization-driven adversarial prompt search (NeurIPS 2024)"
+
+- id: prompt_leakage
+  module: attacks.prompt_leakage
+  description: "Prompt / system-prompt leakage — techniques to extract hidden instructions (SG-Bench / safety benchmarks)"
+
+- id: role_confusion
+  module: attacks.role_confusion
+  description: "Role confusion / hijack — force the model to adopt another role (system/admin) to bypass rules (AgentDojo)"
+
+- id: token_noise
+  module: attacks.token_noise
+  description: "Token-level adversarial noise — homoglyphs / unicode perturbations to evade filters (Soft-Prompt Threats appendix)"
+
+- id: roleplay_jailbreak
+  module: attacks.roleplay_jailbreak
+  description: "Roleplay / persona jailbreak — social-engineering via fictional scenarios to disable rules (NeurIPS 2023)"

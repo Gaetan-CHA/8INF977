@@ -1,0 +1,20 @@
+# Choix des modèles et attaques
+models: ["gpt-4.1-nano"] 
+attacks: ["all"] # ou ["msj_small", "suffix_obf"]
+
+
+# Exécution
+dry_run: true # true => n'appelle pas l'API, print seulement
+runs_dir: runs
+prompts_file: configs/prompts.yaml # optionnel si les attaques génèrent leur prompt seules
+
+
+# Azure par défaut (fallback si absent côté modèle)
+azure:
+endpoint: "https://8inf977-resource.cognitiveservices.azure.com/"
+api_version: "2024-12-01-preview"
+
+
+# Verbosité
+debug: false
+quiet: false
