@@ -1,0 +1,23 @@
+{
+  "models": [
+    "Llama-4-Maverick-17B-128E-Instruct-FP8"
+  ],
+  "attacks": [
+    "none"
+  ],
+  "defenses": [
+    "none"
+  ],
+  "dry_run": false,
+  "runs_dir": "runs",
+  "prompts_file": "configs/prompts.json",
+  "azure": {
+    "endpoint": "https://8inf977-resource.cognitiveservices.azure.com/",
+    "api_version": "2024-12-01-preview"
+  },
+  "debug": false,
+  "quiet": false,
+  "max_runs": 500,
+  "seeded_sampling": false,
+  "concurrency": 1
+}

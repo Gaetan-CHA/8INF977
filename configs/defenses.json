@@ -1,0 +1,92 @@
+[
+  {
+    "id": "pre_sanitizer",
+    "module": "defenses.pre_sanitizer",
+    "type": "pre",
+    "description": "Nettoyage HTML, déobfuscation unicode, trimming du prompt"
+  },
+  {
+    "id": "prompt_adversarial_tuning",
+    "module": "defenses.prompt_adversarial_tuning",
+    "type": "pre",
+    "description": "Ajout de guard-prompt adversarial (PAT) avant le LLM"
+  },
+  {
+    "id": "prompt_injection_detector",
+    "module": "defenses.prompt_injection_detector",
+    "type": "pre",
+    "description": "Détection heuristique ou ML des prompts suspects"
+  },
+  {
+    "id": "perplexity_detector",
+    "module": "defenses.perplexity_detector",
+    "type": "pre",
+    "description": "Détection statistique par perplexité ou surprisal"
+  },
+  {
+    "id": "embedding_space_defense",
+    "module": "defenses.embedding_space_defense",
+    "type": "pre",
+    "description": "Surveillance et normalisation des embeddings (soft-prompt defense)"
+  },
+  {
+    "id": "in_system_shield",
+    "module": "defenses.in_system_shield",
+    "type": "in",
+    "description": "Renforcement du system-prompt et policy injection"
+  },
+  {
+    "id": "tool_isolation",
+    "module": "defenses.tool_isolation",
+    "type": "in",
+    "description": "Restriction des outils disponibles (Tool filtering / Agent isolation)"
+  },
+  {
+    "id": "adversarial_finetune",
+    "module": "defenses.adversarial_finetune",
+    "type": "in",
+    "description": "Fine-tuning robuste sur exemples adversariaux"
+  },
+  {
+    "id": "certified_defenses",
+    "module": "defenses.certified_defenses",
+    "type": "in",
+    "description": "Approches de certification formelle de robustesse"
+  },
+  {
+    "id": "post_classifier",
+    "module": "defenses.post_classifier",
+    "type": "post",
+    "description": "Classifieur de sécurité / filtrage de sortie (redact on fail)"
+  },
+  {
+    "id": "output_filtering",
+    "module": "defenses.output_filtering",
+    "type": "post",
+    "description": "Filtrage syntaxique et suppression de données sensibles"
+  },
+  {
+    "id": "ensemble_moderation",
+    "module": "defenses.ensemble_moderation",
+    "type": "post",
+    "description": "Agrégation de verdicts multi-défenses (ensemble moderation)"
+  },
+  {
+    "id": "red_team_validator",
+    "module": "defenses.red_team_validator",
+    "type": "post",
+    "description": "Seconde validation LLM (red-team / self-critique)"
+  },
+  {
+    "id": "rate_limiting",
+    "module": "defenses.rate_limiting",
+    "type": "post",
+    "description": "Limitation du nombre de requêtes et quotas par utilisateur"
+  },
+  {
+    "id": "human_in_the_loop",
+    "module": "defenses.human_in_the_loop",
+    "type": "post",
+    "description": "Escalade humaine pour cas sensibles ou incertains"
+  }
+]

@@ -1,0 +1,27 @@
+[
+  {
+    "id": "manual",
+    "module": "attacks.manual",
+    "description": "Manual baseline — control prompts with no explicit injection (baseline behavior)."
+  },
+  {
+    "id": "direct",
+    "module": "attacks.direct",
+    "description": "Direct prompt injection — simple prefix/suffix/inline conflicting instructions (baseline template)."
+  },
+  {
+    "id": "ignore_previous",
+    "module": "attacks.ignore_previous",
+    "description": "Ignore previous — instruction that asks the model to ignore prior system messages."
+  },
+  {
+    "id": "system_message",
+    "module": "attacks.system_message",
+    "description": "Simulated system message — inserting a system-like block inside the prompt to test precedence."
+  },
+  {
+    "id": "injecagent",
+    "module": "attacks.injecagent",
+    "description": "Agent-directed injection — simulate instructions addressed to a subordinate agent."
+  }
+]

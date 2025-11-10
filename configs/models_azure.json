@@ -1,0 +1,121 @@
+{
+  "azure": {
+    "endpoint": "https://8inf977-resource.services.ai.azure.com",
+    "api_version": "2024-05-01-preview",
+    "default_model": "gpt-4.1-nano"
+  },
+  "models": [
+    {
+      "model_name": "gpt-4.1-nano",
+      "deployment": "gpt-4.1-nano",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "gpt-4.1-mini",
+      "deployment": "gpt-4.1-mini",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "gpt-4.1",
+      "deployment": "gpt-4.1",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "gpt-4o",
+      "deployment": "gpt-4o",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "DeepSeek-R1",
+      "deployment": "DeepSeek-R1",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "DeepSeek-R1-0528",
+      "deployment": "DeepSeek-R1-0528",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "DeepSeek-V3-0324",
+      "deployment": "DeepSeek-V3-0324",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "grok-3-mini",
+      "deployment": "grok-3-mini",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "grok-4-fast-non-reasoning",
+      "deployment": "grok-4-fast-non-reasoning",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "Llama-3.3-70B-Instruct",
+      "deployment": "Llama-3.3-70B-Instruct",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+      "deployment": "Llama-4-Maverick-17B-128E-Instruct-FP8",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "MAI-DS-R1",
+      "deployment": "MAI-DS-R1",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "o3-mini",
+      "deployment": "o3-mini",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    },
+    {
+      "model_name": "o4-mini",
+      "deployment": "o4-mini",
+      "endpoint": "https://8inf977-resource.services.ai.azure.com",
+      "temperature": 1.0,
+      "max_completion_tokens": 4096,
+      "top_p": 1.0
+    }
+  ]
+}
